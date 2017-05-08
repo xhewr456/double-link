@@ -37,7 +37,6 @@ class DoubleLinkedList
 private:
 	DoubleLinkDataNode<T> *head;
 	DoubleLinkDataNode<int> headNode;
-	DoubleLinkDataNode<T> *nodePTR;
 	DoubleLinkDataNode<T> *last;
 
 protected:
@@ -48,11 +47,15 @@ public:
 	DoubleLinkedList()
 	{
 		head = nullptr;
-		nodePTR = nullptr;
 		last = nullptr;
 	}
+	
+	void printLast()
+	{
+		cout << last->data;
+	}
 
-	void push_front(T newData)
+	void push_first(T newData)
 	{
 		// dynamically create a new node and store value in it
 		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(newData);
@@ -79,6 +82,12 @@ public:
 		}
 
 	}
+
+	void push_last()
+	{
+		// push the new node as the last item in the list
+	}
+
 	void top(T &passedByReference)
 	{
 		// if the head is null, print the error message
@@ -148,7 +157,7 @@ public:
 	void insert_node(T value, int index)
 	{
 		// dynamically create a new node and store value in it
-		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(newData);
+		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(value);
 
 		// if there are no items in the list, make newNode the first item and make last point to the new node
 		if (!head)
@@ -161,7 +170,41 @@ public:
 
 		else
 		{
+			DoubleLinkDataNode<T> *currentNode = head;
 
+			// if location is 1
+			if (index == 1)
+			{
+				newNode->nextNode = currentNode;
+				newNode->previousNode = nullptr;
+				head = newNode;
+			}
+
+			else
+			{
+				DoubleLinkDataNode<T> *previous = nullptr;
+				// list doesn't start at zero, the first element is item one
+				for (int count = 1; (count < index && currentNode->nextNode != nullptr); count++)
+				{
+					previous = currentNode;
+					currentNode = currentNode->nextNode;
+				}
+
+				// if the current node points to null,
+				if (currentNode->nextNode == nullptr)
+				{
+					// set the new node as the last item in the list and update last to point to the new node
+				}
+
+				// else, the node is inserted somewhere in the list that is not first or last
+				else
+				{
+					previous->nextNode = newNode;
+					newNode->nextNode = currentNode;
+					newNode->previousNode = previous;
+					currentNode->previousNode = newNode;
+				}
+			}
 		}
 
 	}
