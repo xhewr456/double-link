@@ -37,6 +37,7 @@ class DoubleLinkedList
 private:
 	DoubleLinkDataNode<T> *first;
 	//DoubleLinkDataNode<int> headNode(0);  // "constant" compile error
+	//DoubleLinkDataNode<int> *headPtr = new DoubleLinkDataNode<int>(0);  // but this works
 	DoubleLinkDataNode<int> headNode;
 	DoubleLinkDataNode<T> *last;
 
