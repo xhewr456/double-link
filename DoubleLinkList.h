@@ -16,7 +16,7 @@ private:
 public:
 	DoubleLinkDataNode()
 	{
-		data = 0;
+		//data = 0;
 		nextNode = nullptr;
 		previousNode = nullptr;
 	}
@@ -35,7 +35,8 @@ template <class T>
 class DoubleLinkedList
 {
 private:
-	DoubleLinkDataNode<T> *head;
+	DoubleLinkDataNode<T> *first;
+	//DoubleLinkDataNode<int> headNode(0);  // "constant" compile error
 	DoubleLinkDataNode<int> headNode;
 	DoubleLinkDataNode<T> *last;
 
@@ -46,9 +47,10 @@ public:
 	// constructor
 	DoubleLinkedList()
 	{
-		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
-		head = nullptr;
+		first = nullptr;
 		last = nullptr;
+		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
+		//headNode(0);
 	}
 	
 	void printLast()
@@ -62,9 +64,9 @@ public:
 		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(newData);
 
 		// if there are no items in the list, make newNode the first item and make last point to the new node
-		if (!head)
+		if (!first)
 		{
-			head = newNode;
+			first = newNode;
 			last = newNode;
 			newNode->previousNode = nullptr;
 			newNode->nextNode = nullptr;
@@ -74,14 +76,13 @@ public:
 		else
 		{
 			DoubleLinkDataNode<T> *tempPtr = nullptr;
-			tempPtr = head;
+			tempPtr = first;
 			tempPtr->previousNode = newNode;
-			head = newNode;
+			first = newNode;
 			newNode->previousNode = nullptr;
 			newNode->nextNode = tempPtr;
-			//headNode->data++;
 		}
-
+		headNode.data++;
 	}
 
 	void push_last()
@@ -92,13 +93,13 @@ public:
 	void top(T &passedByReference)
 	{
 		// if the head is null, print the error message
-		if (!head)
+		if (!first)
 			cout << "error: no items in the list";
 
 		// else, make the passed reference equal to the data stored in the first item
 		else
 		{
-			passedByReference = head->data;
+			passedByReference = first->data;
 		}
 	}
 
@@ -108,9 +109,9 @@ public:
 		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(value);
 
 		// if there are no items in the list, make newNode the first item and make last point to the new node
-		if (!head)
+		if (!first)
 		{
-			head = newNode;
+			first = newNode;
 			last = newNode;
 			newNode->previousNode = nullptr;
 			newNode->nextNode = nullptr;
@@ -119,12 +120,12 @@ public:
 		// else, attempt to insert the node based on its value.  
 		else
 		{
-			DoubleLinkDataNode<T> *tempPtr = head;
+			DoubleLinkDataNode<T> *tempPtr = first;
 
 			// if the first node is greater than Value, insert the new node as the first item in the list and update the link chain
-			if (head->data > value)
+			if (first->data > value)
 			{
-				head = newNode;
+				first = newNode;
 				newNode->nextNode = tempPtr;
 			}
 			// else, search the list for a node whoose data is less than the passed value
@@ -153,6 +154,7 @@ public:
 
 			}
 		}
+		headNode.data++;
 	}
 
 	void insert_node(T value, int index)
@@ -161,9 +163,9 @@ public:
 		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(value);
 
 		// if there are no items in the list, make newNode the first item and make last point to the new node
-		if (!head)
+		if (!first)
 		{
-			head = newNode;
+			first = newNode;
 			last = newNode;
 			newNode->previousNode = nullptr;
 			newNode->nextNode = nullptr;
@@ -171,30 +173,35 @@ public:
 
 		else
 		{
-			DoubleLinkDataNode<T> *currentNode = head;
+			DoubleLinkDataNode<T> *currentNode = first;
 
 			// if location is 1
 			if (index == 1)
 			{
 				newNode->nextNode = currentNode;
 				newNode->previousNode = nullptr;
-				head = newNode;
+				first = newNode;
 			}
 
 			else
 			{
 				DoubleLinkDataNode<T> *previous = nullptr;
-				// list doesn't start at zero, the first element is item one
+
+				// list does not start at zero, the first element is item one
 				for (int count = 1; (count < index && currentNode->nextNode != nullptr); count++)
 				{
 					previous = currentNode;
 					currentNode = currentNode->nextNode;
 				}
 
-				// if the current node points to null,
+				// if the current node points to null, set the new node as the last item in the list and update last to point to new node
 				if (currentNode->nextNode == nullptr)
 				{
-					// set the new node as the last item in the list and update last to point to the new node
+
+					currentNode->nextNode = newNode;
+					newNode->nextNode = nullptr;
+					newNode->previousNode = currentNode;
+					last = newNode;
 				}
 
 				// else, the node is inserted somewhere in the list that is not first or last
@@ -207,26 +214,30 @@ public:
 				}
 			}
 		}
-
+		headNode.data++;
 	}
 
 	void displayList()
 	{
 		// if there are no items in the list, display the message
-		if (!head)
+		if (!first)
+		{
 			cout << "error: list is empty";
+			cout << endl << "list count: " << headNode.data;
+		}
 
 		// else, display all the nodes
 		else
 		{
 			DoubleLinkDataNode<T> *tempPtr;
-			tempPtr = head;
+			tempPtr = first;
 			while (tempPtr->nextNode != nullptr)
 			{
 				cout << tempPtr->data << endl;
 				tempPtr = tempPtr->nextNode;
 			}
 			cout << tempPtr->data << endl;
+			cout << "list count: " << headNode.data;
 		}
 	}
 };
