@@ -46,6 +46,7 @@ public:
 	// constructor
 	DoubleLinkedList()
 	{
+		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
 		head = nullptr;
 		last = nullptr;
 	}
