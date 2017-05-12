@@ -1,7 +1,7 @@
 #ifndef DOUBLELINKLIST_H
 #define DOUBLELINKLIST_H
 #include<iostream>
-#include<string>
+//#include<string>
 
 using namespace std;
 
@@ -16,7 +16,7 @@ private:
 public:
 	DoubleLinkDataNode()
 	{
-		//data = 0;
+		data = 0;
 		nextNode = nullptr;
 		previousNode = nullptr;
 	}
@@ -36,7 +36,7 @@ class DoubleLinkedList
 {
 private:
 	DoubleLinkDataNode<T> *first;
-	//DoubleLinkDataNode<int> headNode(0);  // "constant" compile error
+	//DoubleLinkDataNode<int> headNodeasfdhdgfhgfhgf365(0);  // "constant" compile error
 	//DoubleLinkDataNode<int> *headPtr = new DoubleLinkDataNode<int>(0);  // but this works
 	DoubleLinkDataNode<int> headNode;
 	DoubleLinkDataNode<T> *last;
@@ -53,7 +53,7 @@ public:
 		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
 		//headNode(0);
 	}
-	
+
 	void printLast()
 	{
 		cout << last->data;
@@ -86,10 +86,65 @@ public:
 		headNode.data++;
 	}
 
-	void push_last()
+	void push_last(T newData)
 	{
 		// push the new node as the last item in the list
+		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(newData);
+
+		// if there are no items in the list, make newNode the first item and make last point to newNode
+		if (!first && !last)
+		{
+			first = newNode;
+			last = newNode;
+			newNode->previousNode = nullptr;
+			newNode->nextNode = nullptr;
+		}
+
+		// else, store last in tempPtr, set the new node as the new last and set tempPtr->next to last
+		else
+		{
+			//DoubleLinkDataNode<T> *tempPtr = last;
+			//last = newNode;
+			//tempPtr->nextNode = newNode;
+			//newNode->previousNode = tempPtr;
+			newNode->previousNode = last;
+			newNode->nextNode = nullptr;
+			last->nextNode = newNode;
+			last = newNode;
+		}
+		headNode.data++;
 	}
+
+	void pop_front()
+	{
+		// remove the first item in the list
+
+		if (!first)
+		{
+			cout << "error: list is empty";
+		}
+
+		else
+		{
+
+		}
+	}
+
+	void pop_last()
+	{
+		// remove the last item in the list
+
+		if (!first && !last)
+		{
+			cout << "error: list is empty";
+		}
+
+		else
+		{
+
+		}
+	}
+
 
 	void top(T &passedByReference)
 	{
@@ -104,59 +159,53 @@ public:
 		}
 	}
 
-	void insert_node(T value)
-	{
-		// dynamically create a new node and store value in it
-		DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(value);
-
-		// if there are no items in the list, make newNode the first item and make last point to the new node
-		if (!first)
-		{
-			first = newNode;
-			last = newNode;
-			newNode->previousNode = nullptr;
-			newNode->nextNode = nullptr;
-		}
-
-		// else, attempt to insert the node based on its value.  
-		else
-		{
-			DoubleLinkDataNode<T> *tempPtr = first;
-
-			// if the first node is greater than Value, insert the new node as the first item in the list and update the link chain
-			if (first->data > value)
-			{
-				first = newNode;
-				newNode->nextNode = tempPtr;
-			}
-			// else, search the list for a node whoose data is less than the passed value
-			else
-			{
-				while (tempPtr->data < value && tempPtr->nextNode != nullptr)
-				{
-					tempPtr = tempPtr->nextNode;
-				}
-				
-				// if all the items in the list are lower than Value, insert the node at the end and update the link chain
-				if (tempPtr->nextNode == nullptr)
-				{
-					tempPtr->nextNode = newNode;
-					newNode->previousNode = tempPtr;
-					last = newNode;
-				}
-
-				// insert the new node after tempPtr node and update the link chain
-				else
-				{
-					newNode->nextNode = tempPtr->nextNode;
-					newNode->previousNode = tempPtr;
-					tempPtr->nextNode = newNode;
-				}
-
-			}
-		}
-		headNode.data++;
-	}
+	//void insert_node(T value)
+	//{
+	//	// dynamically create a new node and store value in it
+	//	DoubleLinkDataNode<T> *newNode = new DoubleLinkDataNode<T>(value); 
+	//	// if there are no items in the list, make newNode the first item and make last point to the new node
+	//	if (!first)
+	//	{
+	//		first = newNode;
+	//		last = newNode;
+	//		newNode->previousNode = nullptr;
+	//		newNode->nextNode = nullptr;
+	//	}
+	//	// else, attempt to insert the node based on its value.  
+	//	else
+	//	{
+	//		DoubleLinkDataNode<T> *tempPtr = first;
+	//		// if the first node is greater than Value, insert the new node as the first item in the list and update the link chain
+	//		if (first->data > value)
+	//		{
+	//			first = newNode;
+	//			newNode->nextNode = tempPtr;
+	//		}
+	//		// else, search the list for a node whoose data is less than the passed value
+	//		else
+	//		{
+	//			while (tempPtr->data < value && tempPtr->nextNode != nullptr)
+	//			{
+	//				tempPtr = tempPtr->nextNode;
+	//			}
+	//			// if all the items in the list are lower than Value, insert the node at the end and update the link chain
+	//			if (tempPtr->nextNode == nullptr)
+	//			{
+	//				tempPtr->nextNode = newNode;
+	//				newNode->previousNode = tempPtr;
+	//				last = newNode;
+	//			}
+	//			// insert the new node after tempPtr node and update the link chain
+	//			else
+	//			{
+	//				newNode->nextNode = tempPtr->nextNode;
+	//				newNode->previousNode = tempPtr;
+	//				tempPtr->nextNode = newNode;
+	//			}
+	//		}
+	//	}
+	//	headNode.data++;
+	//}
 
 	void insert_node(T value, int index)
 	{
@@ -224,7 +273,7 @@ public:
 		if (!first)
 		{
 			cout << "error: list is empty";
-			cout << endl << "list count: " << headNode.data;
+			//cout << endl << "list count: " << headNode.data;
 		}
 
 		// else, display all the nodes
@@ -240,6 +289,12 @@ public:
 			cout << tempPtr->data << endl;
 			cout << "list count: " << headNode.data;
 		}
+	}
+
+	// return the number of items in the list
+	int listSize()
+	{
+		return headNode.data;
 	}
 };
 
