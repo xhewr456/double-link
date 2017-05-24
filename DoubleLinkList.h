@@ -3,7 +3,7 @@
 #include<iostream>
 //#include<string>
 
-using namespace std;
+//using namespace std;
 
 
 template <class T>
@@ -16,7 +16,7 @@ private:
 public:
 	DoubleLinkDataNode()
 	{
-		data = 0;
+		//data = 0;
 		nextNode = nullptr;
 		previousNode = nullptr;
 	}
@@ -35,12 +35,12 @@ template <class T>
 class DoubleLinkedList
 {
 private:
+	//DoubleLinkDataNode<int> headNodeTest(0);  // "constant" compile error
+	//DoubleLinkDataNode<int> *headPtr;// = new DoubleLinkDataNode<int>(0);  // but this works
+	DoubleLinkDataNode<int> headNode;  // create an instance of the node object and not merely a pointer
 	DoubleLinkDataNode<T> *first;
-	//DoubleLinkDataNode<int> headNodeasfdhdgfhgfhgf365(0);  // "constant" compile error
-	//DoubleLinkDataNode<int> *headPtr = new DoubleLinkDataNode<int>(0);  // but this works
-	DoubleLinkDataNode<int> headNode;
 	DoubleLinkDataNode<T> *last;
-
+	int listCount;
 protected:
 	// protected functions
 
@@ -48,17 +48,45 @@ public:
 	// constructor
 	DoubleLinkedList()
 	{
+		//headPtr = new DoubleLinkDataNode<int>(0);  // but this works
+		listCount = 0;  // number of items in the list
 		first = nullptr;
 		last = nullptr;
 		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
 		//headNode(0);
 	}
 
-	void printLast()
+	// destructor
+	~DoubleLinkedList()
 	{
-		cout << last->data;
+		DoubleLinkDataNode<T> *currentNode = nullptr; // To traverse the list
+		DoubleLinkDataNode<T> *nextNode = nullptr; // To point to the next node
+
+		// Position currentNode at the beginning of the list.
+		currentNode = first;
+
+		// While currentNode is not at the end of the list...
+		while (currentNode != nullptr)
+		{
+			nextNode = currentNode->nextNode;
+			delete currentNode;
+			currentNode = nextNode;
+		}
 	}
 
+	// debug function
+	void printFirst()
+	{
+		std::cout << "print First: " << first->data;
+	}
+
+	// debug function
+	void printLast()
+	{
+		std::cout << "print Last: " << last->data;
+	}
+
+	// add new item as the first item of the list
 	void push_first(T newData)
 	{
 		// dynamically create a new node and store value in it
@@ -76,14 +104,14 @@ public:
 		// else, add the new node to the front of the list and update the link chain
 		else
 		{
-			DoubleLinkDataNode<T> *tempPtr = nullptr;
-			tempPtr = first;
-			tempPtr->previousNode = newNode;
-			first = newNode;
 			newNode->previousNode = nullptr;
-			newNode->nextNode = tempPtr;
+			newNode->nextNode = first;
+			first->previousNode = newNode;
+			first = newNode;
 		}
+		// increment the item counter
 		headNode.data++;
+		listCount++;
 	}
 
 	void push_last(T newData)
@@ -100,19 +128,17 @@ public:
 			newNode->nextNode = nullptr;
 		}
 
-		// else, store last in tempPtr, set the new node as the new last and set tempPtr->next to last
+		// else, 
 		else
 		{
-			//DoubleLinkDataNode<T> *tempPtr = last;
-			//last = newNode;
-			//tempPtr->nextNode = newNode;
-			//newNode->previousNode = tempPtr;
 			newNode->previousNode = last;
 			newNode->nextNode = nullptr;
 			last->nextNode = newNode;
 			last = newNode;
 		}
+		// increment the item counter
 		headNode.data++;
+		listCount++;
 	}
 
 	void pop_front()
@@ -121,12 +147,30 @@ public:
 
 		if (!first)
 		{
-			cout << "error: list is empty";
+			std::cout << "error: list is empty";
 		}
 
 		else
 		{
+			DoubleLinkDataNode<T> *currentPtr = nullptr;
+			currentPtr = first;
 
+			if (listCount == 1)
+			{
+				delete currentPtr;
+				first = nullptr;
+				last = nullptr;
+			}
+
+			else
+			{
+				first = currentPtr->nextNode;
+				first->previousNode = nullptr;
+				delete currentPtr;
+			}
+			// decrement the item counter
+			headNode.data--;
+			listCount--;
 		}
 	}
 
@@ -136,28 +180,66 @@ public:
 
 		if (!first && !last)
 		{
-			cout << "error: list is empty";
+			std::cout << "error: list is empty";
 		}
 
 		else
 		{
+			DoubleLinkDataNode<T> *currentPtr = nullptr;
+			currentPtr = last;
 
+			if (listCount == 1)
+			{
+				delete currentPtr;
+				first = nullptr;
+				last = nullptr;
+			}
+
+			else
+			{
+				last = currentPtr->previousNode;
+				last->nextNode = nullptr;
+				delete currentPtr;
+			}
+			// decrement the item counter
+			headNode.data--;
+			listCount--;
 		}
 	}
 
-
-	void top(T &passedByReference)
+	T getFirst()
 	{
-		// if the head is null, print the error message
-		if (!first)
-			cout << "error: no items in the list";
-
-		// else, make the passed reference equal to the data stored in the first item
-		else
-		{
-			passedByReference = first->data;
-		}
+		return first->data;
 	}
+
+	T getLast()
+	{
+		return last->data;
+	}
+
+	T getIndex(int index)
+	{
+		DoubleLinkDataNode<T> *currentNode = nullptr;
+		currentNode = first;
+		for (int count = 0; count < index; count++)
+		{
+			currentNode = currentNode->nextNode;
+		}
+		return currentNode->data;
+	}
+
+	//void top(T &passedByReference)
+	//{
+	//	// if the head is null, print the error message
+	//	if (!first)
+	//		std::cout << "error: no items in the list";
+
+	//	// else, make the passed reference equal to the data stored in the first item
+	//	else
+	//	{
+	//		passedByReference = first->data;
+	//	}
+	//}
 
 	//void insert_node(T value)
 	//{
@@ -228,7 +310,7 @@ public:
 			// if location is 1
 			if (index == 1)
 			{
-				newNode->nextNode = currentNode;
+				newNode->nextNode = first;
 				newNode->previousNode = nullptr;
 				first = newNode;
 			}
@@ -265,6 +347,7 @@ public:
 			}
 		}
 		headNode.data++;
+		listCount++;
 	}
 
 	void displayList()
@@ -272,22 +355,20 @@ public:
 		// if there are no items in the list, display the message
 		if (!first)
 		{
-			cout << "error: list is empty";
-			//cout << endl << "list count: " << headNode.data;
+			std::cout << "error: list is empty";
 		}
 
 		// else, display all the nodes
 		else
 		{
-			DoubleLinkDataNode<T> *tempPtr;
-			tempPtr = first;
-			while (tempPtr->nextNode != nullptr)
+			DoubleLinkDataNode<T> *currentPtr = nullptr;
+			currentPtr = first;
+			while (currentPtr != nullptr)
 			{
-				cout << tempPtr->data << endl;
-				tempPtr = tempPtr->nextNode;
+				std::cout << currentPtr->data << endl;
+				currentPtr = currentPtr->nextNode;
 			}
-			cout << tempPtr->data << endl;
-			cout << "list count: " << headNode.data;
+			//std::cout << "list count: " << headNode.data;
 		}
 	}
 
@@ -296,6 +377,28 @@ public:
 	{
 		return headNode.data;
 	}
+
+	void emptyList()
+	{
+		DoubleLinkDataNode<T> *currentNode = nullptr; // To traverse the list
+		DoubleLinkDataNode<T> *nextNode = nullptr; // To point to the next node
+
+		// Position currentNode at the beginning of the list.
+		currentNode = first;
+
+		// While currentNode is not at the end of the list...
+		while (currentNode != nullptr)
+		{
+			nextNode = currentNode->nextNode;
+			delete currentNode;
+			currentNode = nextNode;
+		}
+
+		// now the list can be used again
+		first = nullptr;
+		last = nullptr;
+	}
+
 };
 
 #endif
