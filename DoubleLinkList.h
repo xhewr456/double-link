@@ -52,8 +52,7 @@ public:
 		listCount = 0;  // number of items in the list
 		first = nullptr;
 		last = nullptr;
-		headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
-		//headNode(0);
+		//headNode.nextNode = reinterpret_cast<DoubleLinkDataNode<int>*>(first);
 	}
 
 	// destructor
