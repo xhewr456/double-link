@@ -37,7 +37,7 @@ class DoubleLinkedList
 private:
 	//DoubleLinkDataNode<int> headNodeTest(0);  // "constant" compile error
 	//DoubleLinkDataNode<int> *headPtr;// = new DoubleLinkDataNode<int>(0);  // but this works
-	DoubleLinkDataNode<int> headNode;  // create an instance of the node object and not merely a pointer
+	//DoubleLinkDataNode<int> headNode;  // create an instance of the node object and not merely a pointer
 	DoubleLinkDataNode<T> *first;
 	DoubleLinkDataNode<T> *last;
 	int listCount;
@@ -109,7 +109,7 @@ public:
 			first = newNode;
 		}
 		// increment the item counter
-		headNode.data++;
+		//headNode.data++;
 		listCount++;
 	}
 
@@ -136,7 +136,7 @@ public:
 			last = newNode;
 		}
 		// increment the item counter
-		headNode.data++;
+		//headNode.data++;
 		listCount++;
 	}
 
@@ -168,7 +168,7 @@ public:
 				delete currentPtr;
 			}
 			// decrement the item counter
-			headNode.data--;
+			//headNode.data--;
 			listCount--;
 		}
 	}
@@ -201,7 +201,7 @@ public:
 				delete currentPtr;
 			}
 			// decrement the item counter
-			headNode.data--;
+			//headNode.data--;
 			listCount--;
 		}
 	}
@@ -285,7 +285,7 @@ public:
 	//			}
 	//		}
 	//	}
-	//	headNode.data++;
+	//	//headNode.data++;
 	//}
 
 	void insert_node(T value, int index)
@@ -345,7 +345,7 @@ public:
 				}
 			}
 		}
-		headNode.data++;
+		//headNode.data++;
 		listCount++;
 	}
 
@@ -374,7 +374,8 @@ public:
 	// return the number of items in the list
 	int listSize()
 	{
-		return headNode.data;
+		return listCount;
+		//return headNode.data;
 	}
 
 	void emptyList()
